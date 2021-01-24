@@ -20,7 +20,7 @@ def validate_workflow(function=None):
     @wraps(function)
     def wrapper(*args, **kwargs):
         if request.json is not None:
-            if request.json.get("trigger"):
+            if request.json.get("trigger") and request.json.get("steps"):
                 return function(*args, **kwargs)
             elif request.json.get("steps"):
                 steps = request.json.get("steps")

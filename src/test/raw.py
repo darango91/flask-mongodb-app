@@ -33,7 +33,7 @@ INITIAL_DATA = [
 ]
 
 
-TEST_WORKFLOW = {
+TEST_VALID_WORKFLOW = {
   "trigger": {
     "params": {
       "user_id": "105398891",
@@ -50,6 +50,37 @@ TEST_WORKFLOW = {
   "steps": [
     {
       "id": "validate_account",
+      "params": {
+        "user_id": {"from_id": "start", "param_id": "user_id"},
+        "pin": {"from_id": "start", "param_id": "pin"}
+      },
+      "action": "validate_account",
+      "transitions": []
+    }
+  ]
+}
+
+
+TEST_NOT_VALID_WORKFLOW = {
+  "trigger": {
+    "params": {
+      "user_id": "105398891",
+      "pin": 2090
+    },
+    "transitions": [
+      {
+        "target": "validate_account",
+        "condition": []
+      }
+    ],
+    "id": "start"
+  }
+}
+
+TEST_STEPS_VALID_WORKFLOW = {
+  "steps": [
+    {
+      "id": "start",
       "params": {
         "user_id": {"from_id": "start", "param_id": "user_id"},
         "pin": {"from_id": "start", "param_id": "pin"}
