@@ -1,4 +1,4 @@
-# flask-mongodb-app
+# Flask and MongoDB App
 A simple Flask and MongoDB application
 
 Requirements for this project:
