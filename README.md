@@ -29,7 +29,7 @@ MONGO_DB_CONNECTION = ""
 To the value that you want
 
 
-### Running test
+### Running tests
 All the unit tests are located in the folder [./src/tests](src/test)
 
 You can run the unit tests by using:
@@ -38,3 +38,7 @@ python -m unittest discover
 ```
 
 (Just make sure to be outisde the folder src when running it)
+
+### Postman collection
+This repository also includes a Postman API json file to help the usage with some base data to insert in the DB
+please check the [Postman JSON file](flask_mongo_app.postman_collection.json)

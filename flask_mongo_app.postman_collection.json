@@ -1,0 +1,71 @@
+{
+	"info": {
+		"_postman_id": "bb0888fb-e721-4214-adfa-a13169987d04",
+		"name": "flask_mongo_app",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create_accounts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "content",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n    {\r\n    \"user_id\": \"105398891\",\r\n    \"pin\": 2090,\r\n    \"balance\": 100001\r\n    },\r\n    {\r\n        \"user_id\": \"105398892\",\r\n        \"pin\": 1111,\r\n        \"balance\": 100000\r\n    },\r\n    {\r\n        \"user_id\": \"105398893\",\r\n        \"pin\": 2323,\r\n        \"balance\": 250000\r\n    },\r\n    {\r\n        \"user_id\": \"105398894\",\r\n        \"pin\": 6598,\r\n        \"balance\": 350100\r\n    },\r\n    {\r\n        \"user_id\": \"105398895\",\r\n        \"pin\": 8526,\r\n        \"balance\": 50000\r\n    },\r\n    {\r\n        \"user_id\": \"105398896\",\r\n        \"pin\": 9658,\r\n        \"balance\": 110000\r\n    }\r\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_workflow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"steps\": [\r\n    {\r\n      \"id\": \"validate_account\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"},\r\n        \"pin\": {\"from_id\": \"start\", \"param_id\": \"pin\"}\r\n      },\r\n      \"action\": \"validate_account\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [\r\n            {\"from_id\": \"validate_account\", \"field_id\": \"is_valid\", \"operator\": \"eq\", \"value\": true}\r\n          ],\r\n          \"target\": \"account_balance\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"account_balance\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"}\r\n      },\r\n      \"action\": \"get_account_balance\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [\r\n            {\r\n              \"from_id\": \"account_balance\", \r\n              \"field_id\": \"balance\", \r\n              \"operator\": \"gt\", \r\n              \"value\": 100000\r\n            }\r\n          ],\r\n          \"target\": \"withdraw_30\"\r\n        },\r\n        {\r\n          \"condition\": [\r\n            {\r\n              \"from_id\": \"account_balance\", \r\n              \"field_id\": \"balance\", \r\n              \"operator\": \"lt\", \r\n              \"value\": 100000\r\n            }\r\n          ],\r\n          \"target\": \"deposit_200\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"withdraw_30\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"},\r\n        \"money\": {\"from_id\": null, \"value\": 30}\r\n      },\r\n      \"action\": \"withdraw_in_dollars\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [],\r\n          \"target\": \"account_balance_end_30\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"account_balance_end_30\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"}\r\n      },\r\n      \"action\": \"get_account_balance\",\r\n      \"transitions\": []\r\n    },\r\n    {\r\n      \"id\": \"deposit_200\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"},\r\n        \"money\": {\"from_id\": null, \"value\": 200000}\r\n      },\r\n      \"action\": \"deposit_money\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [],\r\n          \"target\": \"account_balance_200\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"account_balance_200\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"}\r\n      },\r\n      \"action\": \"get_account_balance\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [\r\n            {\r\n              \"from_id\": \"account_balance\", \r\n              \"field_id\": \"balance\", \r\n              \"operator\": \"gt\", \r\n              \"value\": 250000\r\n            }\r\n          ],\r\n          \"target\": \"withdraw_50\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"withdraw_50\",\r\n      \"params\": {\r\n        \"user_id\": {\"from_id\": \"start\", \"param_id\": \"user_id\"},\r\n        \"money\": {\"from_id\": null, \"value\": 50000}\r\n      },\r\n      \"action\": \"withdraw_in_pesos\",\r\n      \"transitions\": [\r\n        {\r\n          \"condition\": [],\r\n          \"target\": \"account_balance_end_50\"\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"id\": \"account_balance_end_50\",\r\n      \"params\": {\r\n        \"user_id\": {\r\n          \"from_id\": \"start\", \r\n          \"param_id\": \"user_id\"\r\n        }\r\n      },\r\n      \"action\": \"get_account_balance\",\r\n      \"transitions\": []\r\n    }\r\n  ],\r\n  \"trigger\": {\r\n    \"params\": {\r\n        \"user_id\": \"105398891\",\r\n        \"pin\": 2090\r\n    },\r\n    \"transitions\": [\r\n      {\r\n        \"target\": \"validate_account\",\r\n        \"condition\": []\r\n      }\r\n    ],\r\n    \"id\": \"start\"\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/workflows",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"workflows"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
