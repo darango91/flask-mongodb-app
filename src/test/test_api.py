@@ -24,26 +24,7 @@ class ApiBaseTest(unittest.TestCase):
     configure_routes(app, mongo)
     client = app.test_client()
 
-    url = '/test_me'
-
-    def test_get(self):
-        response = self.client.get(self.url)
-        data = json.loads(response.data).get("data")
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, API_TEST_TEXT)
-
-    @mongomock.patch(servers=(('localhost', 27017),))
-    def test_base_route(self):
-
-        objects = INITIAL_DATA
-        client = pymongo.MongoClient('localhost')
-        client.db.collection.insert_many(objects)
-
-        response = self.client.get(self.url)
-        data = json.loads(response.data).get("data")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data, API_TEST_TEXT)
+    url = ''
 
 
 class TestAccountsAPI(ApiBaseTest):
